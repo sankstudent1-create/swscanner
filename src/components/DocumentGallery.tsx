@@ -249,32 +249,32 @@ export const DocumentGallery: React.FC = () => {
     <div className="w-full h-full bg-[#121212] flex flex-col text-white select-none">
       {/* Top Header */}
       <div
-        className="px-5 pb-3.5 border-b border-white/10 flex justify-between items-center bg-[#181818]/90 backdrop-blur-md shrink-0"
+        className="px-3 sm:px-5 pb-3.5 border-b border-white/10 flex justify-between items-center bg-[#181818]/90 backdrop-blur-md shrink-0 gap-1.5 sm:gap-2"
         style={{
           paddingTop: 'max(14px, calc(env(safe-area-inset-top, 0px) + 8px))',
         }}
       >
         {isSelectionMode ? (
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={exitSelectionMode}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition shrink-0"
               >
                 <X size={16} />
               </button>
-              <span className="text-sm font-bold text-green-400">
+              <span className="text-xs sm:text-sm font-bold text-green-400">
                 {selectedDocIds.size} Selected
               </span>
             </div>
             <button
               onClick={handleSelectAll}
-              className="flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white bg-white/10 px-3 py-1.5 rounded-xl transition"
+              className="flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white bg-white/10 px-2.5 sm:px-3 py-1.5 rounded-xl transition shrink-0"
             >
               {selectedDocIds.size === documents.length ? (
                 <>
                   <Square size={13} />
-                  <span>Deselect All</span>
+                  <span>Deselect</span>
                 </>
               ) : (
                 <>
@@ -286,38 +286,41 @@ export const DocumentGallery: React.FC = () => {
           </div>
         ) : (
           <>
-            <BrandLogo size={32} showText={true} />
+            <BrandLogo size={30} showText={true} />
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <button
                 onClick={() => {
                   if (navigator.vibrate) navigator.vibrate(15);
                   setShowOnboarding(true);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500/15 via-green-500/15 to-purple-500/15 border border-green-400/30 text-xs font-semibold text-white/90 hover:text-white transition active:scale-95 shadow-[0_0_12px_rgba(74,222,128,0.2)]"
-                title="View Gemini AI Features"
+                className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500/15 via-green-500/15 to-purple-500/15 border border-green-400/30 text-xs font-semibold text-white/90 hover:text-white transition active:scale-95 shadow-[0_0_12px_rgba(74,222,128,0.2)] shrink-0"
+                title="SWInfosystems Pro Features"
               >
-                <GeminiSparkleStar size={15} gradient="aurora" />
-                <span className="hidden sm:inline">AI Engine</span>
+                <GeminiSparkleStar size={14} gradient="aurora" />
+                <span className="hidden md:inline">Info</span>
               </button>
 
               {documents.length > 0 && (
                 <>
                   <button
                     onClick={() => setIsSelectionMode(true)}
-                    className="flex items-center gap-1 bg-white/10 text-white/80 hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition"
+                    className="flex items-center gap-1 bg-white/10 text-white/80 hover:text-white px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition shrink-0"
+                    title="Select Documents"
                   >
                     <CheckSquare size={13} />
-                    <span>Select</span>
+                    <span className="hidden xs:inline">Select</span>
                   </button>
 
                   <button
                     onClick={handleExportAll}
                     disabled={isExporting}
-                    className="flex items-center gap-1.5 bg-green-400 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-[0_0_15px_rgba(74,222,128,0.3)] hover:bg-green-300 transition active:scale-95 disabled:opacity-50"
+                    className="flex items-center gap-1 sm:gap-1.5 bg-green-400 text-black px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-[0_0_15px_rgba(74,222,128,0.3)] hover:bg-green-300 transition active:scale-95 disabled:opacity-50 shrink-0"
+                    title="Export All to PDF"
                   >
                     <FileDown size={14} />
-                    <span>{isExporting ? 'Exporting...' : 'Export All'}</span>
+                    <span>{isExporting ? '...' : 'Export'}</span>
+                    <span className="hidden xs:inline"> All</span>
                   </button>
                 </>
               )}
@@ -509,7 +512,7 @@ export const DocumentGallery: React.FC = () => {
           >
             {/* Modal Header */}
             <div
-              className="shrink-0 flex items-center justify-between px-4 pb-3 border-b border-white/10 bg-black/80"
+              className="shrink-0 flex items-center justify-between px-2.5 sm:px-4 pb-3 border-b border-white/10 bg-black/80 gap-1.5 sm:gap-2"
               style={{
                 paddingTop: 'max(14px, calc(env(safe-area-inset-top, 0px) + 8px))',
               }}
@@ -519,33 +522,34 @@ export const DocumentGallery: React.FC = () => {
                   setSelectedDoc(null);
                   setOcrResultText(null);
                 }}
-                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center active:bg-white/20"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/10 flex items-center justify-center active:bg-white/20 shrink-0"
+                title="Back to gallery"
               >
-                <ChevronLeft size={20} className="text-white" />
+                <ChevronLeft size={18} className="text-white" />
               </button>
 
               {/* Title / Editable Input */}
-              <div className="flex-1 flex items-center justify-center px-3 max-w-sm">
+              <div className="flex-1 min-w-0 flex items-center justify-center px-1 sm:px-2 overflow-hidden">
                 {isEditingTitle ? (
-                  <div className="flex items-center gap-1.5 w-full">
+                  <div className="flex items-center gap-1 w-full max-w-[160px] sm:max-w-xs">
                     <input
                       type="text"
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
-                      className="w-full bg-white/10 border border-green-400 rounded-lg px-2.5 py-1 text-sm text-white focus:outline-none"
+                      className="w-full min-w-0 bg-white/10 border border-green-400 rounded-lg px-2 py-1 text-xs sm:text-sm text-white focus:outline-none"
                       autoFocus
                     />
                     <button
                       onClick={handleSaveTitle}
-                      className="w-8 h-8 rounded-lg bg-green-400 text-black flex items-center justify-center shrink-0 font-bold"
+                      className="w-7 h-7 rounded-lg bg-green-400 text-black flex items-center justify-center shrink-0 font-bold"
                     >
-                      <Check size={16} />
+                      <Check size={14} />
                     </button>
                     <button
                       onClick={() => setIsEditingTitle(false)}
-                      className="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center shrink-0"
+                      className="w-7 h-7 rounded-lg bg-white/10 text-white flex items-center justify-center shrink-0"
                     >
-                      <X size={16} />
+                      <X size={14} />
                     </button>
                   </div>
                 ) : (
@@ -554,41 +558,42 @@ export const DocumentGallery: React.FC = () => {
                       setEditedTitle(selectedDoc.title);
                       setIsEditingTitle(true);
                     }}
-                    className="flex items-center gap-1.5 cursor-pointer group"
+                    className="flex items-center gap-1 cursor-pointer group min-w-0 max-w-full"
                     title="Tap to rename"
                   >
-                    <span className="text-sm font-bold truncate max-w-[180px]">
+                    <span className="text-xs sm:text-sm font-bold truncate max-w-[110px] xs:max-w-[170px] sm:max-w-[260px]">
                       {selectedDoc.title}
                     </span>
                     <Edit2
-                      size={13}
-                      className="text-white/40 group-hover:text-green-400 transition"
+                      size={11}
+                      className="text-white/40 group-hover:text-green-400 transition shrink-0"
                     />
                   </div>
                 )}
               </div>
 
               {/* Actions: AI OCR / Export PDF / Delete */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                 {/* AI OCR Button */}
                 <button
                   onClick={handleRunOcr}
                   disabled={ocrLoading}
-                  className="flex items-center gap-1 bg-white/10 hover:bg-white/20 text-white px-2.5 py-1.5 rounded-xl text-xs font-semibold transition"
-                  title="Extract text with AI OCR"
+                  className="flex items-center gap-1 bg-white/10 hover:bg-white/20 text-white px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition shrink-0"
+                  title="Extract text with OCR"
                 >
                   {ocrLoading ? (
                     <Loader2 size={13} className="animate-spin text-green-400" />
                   ) : (
                     <Sparkles size={13} className="text-green-400" />
                   )}
-                  <span>{ocrLoading ? 'Scanning...' : 'AI OCR'}</span>
+                  <span className="hidden xs:inline">{ocrLoading ? 'Scanning...' : 'OCR'}</span>
                 </button>
 
                 <button
                   onClick={() => handleExportSingleDoc(selectedDoc)}
                   disabled={isExporting}
-                  className="flex items-center gap-1 bg-green-400 text-black px-2.5 py-1.5 rounded-xl text-xs font-bold shadow-md hover:bg-green-300 transition"
+                  className="flex items-center gap-1 bg-green-400 text-black px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold shadow-md hover:bg-green-300 transition shrink-0"
+                  title="Share / Download PDF"
                 >
                   <Share2 size={13} />
                   <span>PDF</span>
@@ -601,9 +606,10 @@ export const DocumentGallery: React.FC = () => {
                       setSelectedDoc(null);
                     }
                   }}
-                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-red-500/30 hover:text-red-400 flex items-center justify-center transition"
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-red-500/30 hover:text-red-400 flex items-center justify-center transition shrink-0"
+                  title="Delete document"
                 >
-                  <Trash2 size={15} />
+                  <Trash2 size={14} />
                 </button>
               </div>
             </div>

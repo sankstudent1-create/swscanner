@@ -531,7 +531,7 @@ export const CameraView: React.FC = () => {
             <HelpCircle size={16} />
           </button>
 
-          {/* Gemini AI Tour button */}
+          {/* SWScanner Pro Tour button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -539,7 +539,7 @@ export const CameraView: React.FC = () => {
               setShowOnboarding(true);
             }}
             className="w-9 h-9 rounded-full bg-gradient-to-r from-cyan-500/20 via-green-500/20 to-purple-500/20 border border-green-400/40 text-green-400 flex items-center justify-center transition active:scale-95 shadow-[0_0_12px_rgba(74,222,128,0.3)]"
-            title="Gemini AI Scanner Overview"
+            title="SWScanner Pro Features"
           >
             <GeminiSparkleStar size={17} gradient="aurora" />
           </button>

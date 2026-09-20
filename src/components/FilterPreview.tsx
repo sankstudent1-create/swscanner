@@ -430,7 +430,7 @@ export const FilterPreview: React.FC = () => {
                 className="w-11 h-11 border-[3px] border-green-400 border-t-transparent rounded-full mb-2.5 shadow-[0_0_15px_rgba(74,222,128,0.4)]"
               />
               <span className="text-white/80 text-xs font-medium tracking-wide">
-                Processing with Retinex AI...
+                Enhancing document clarity...
               </span>
             </motion.div>
           )}

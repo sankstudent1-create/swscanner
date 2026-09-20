@@ -62,17 +62,17 @@ export const BrandLogo: React.FC<{ size?: number; showText?: boolean }> = ({
       </div>
 
       {showText && (
-        <div className="flex flex-col leading-none">
-          <div className="flex items-center gap-1.5">
-            <span className="font-display font-extrabold text-base tracking-tight text-white">
+        <div className="flex flex-col leading-none min-w-0">
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            <span className="font-display font-extrabold text-sm sm:text-base tracking-tight text-white truncate">
               SWScanner<span className="text-green-400">AI</span>
             </span>
-            <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-green-400/15 text-green-400 border border-green-400/30">
+            <span className="px-1 sm:px-1.5 py-0.5 rounded text-[7px] sm:text-[8px] font-black uppercase tracking-wider bg-green-400/15 text-green-400 border border-green-400/30 shrink-0">
               PRO
             </span>
           </div>
-          <span className="text-[10px] text-white/40 tracking-wider font-medium mt-0.5">
-            Neural Document Scanner
+          <span className="hidden md:inline text-[9px] text-white/40 tracking-wider font-medium mt-0.5">
+            Powered by SWINFOSYSTEMS
           </span>
         </div>
       )}

@@ -24,16 +24,16 @@ export const GeminiOnboardingSplash: React.FC<GeminiOnboardingSplashProps> = ({
 
   const slides = [
     {
-      title: 'Next-Gen AI Vision',
-      badge: 'GEMINI VISION ENGINE',
+      title: 'SW Neural Vision',
+      badge: 'SW AI CORE',
       description:
-        'Studio-grade edge detection with multi-pass Otsu segmentation, Canny gradient filters, and 4-extremal convex hull quad bounding.',
+        'Studio-grade edge detection with adaptive Otsu binarization, multi-pass gradient filters, and 4-point quadrilateral quad bounding.',
       icon: <Scan className="text-green-400" size={24} />,
-      metric: '98.4% Edge Accuracy',
+      metric: '98.8% Edge Accuracy',
     },
     {
-      title: 'Magic Color 2.0 & Retinex',
-      badge: 'DUAL-ENGINE RETINEX',
+      title: 'Magic Color & Retinex',
+      badge: 'SW RETINEX ENHANCE',
       description:
         'Background illumination division bleaches wrinkled paper to pure #ffffff while boosting handwritten ink strokes, blue signatures, and red stamps.',
       icon: <Sparkles className="text-cyan-400" size={24} />,
@@ -41,7 +41,7 @@ export const GeminiOnboardingSplash: React.FC<GeminiOnboardingSplashProps> = ({
     },
     {
       title: 'Continuous Batch & ID Cards',
-      badge: 'INSTANT COMPOSITE',
+      badge: 'SMART COMPOSITE',
       description:
         'Continuous multi-page camera snapping without interruption, plus dual-side (Front + Back) ID card capture composited onto official A4 sheets.',
       icon: <CreditCard className="text-purple-400" size={24} />,
@@ -89,7 +89,7 @@ export const GeminiOnboardingSplash: React.FC<GeminiOnboardingSplashProps> = ({
             <GeminiSparkleStar size={26} gradient="aurora" />
             <div className="flex flex-col">
               <span className="text-[10px] font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-green-400 to-purple-400 uppercase">
-                POWERED BY GEMINI VISION
+                POWERED BY SWINFOSYSTEMS
               </span>
               <span className="font-display font-extrabold text-sm tracking-tight text-white">
                 SWScanner <span className="text-green-400">PRO</span>
@@ -116,7 +116,7 @@ export const GeminiOnboardingSplash: React.FC<GeminiOnboardingSplashProps> = ({
           >
             <img
               src="/gemini_hero.jpg"
-              alt="Gemini AI Scanner Preview"
+              alt="SWScanner AI Preview"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
 
@@ -185,14 +185,14 @@ export const GeminiOnboardingSplash: React.FC<GeminiOnboardingSplashProps> = ({
             paddingBottom: 'max(24px, calc(env(safe-area-inset-bottom, 0px) + 12px))',
           }}
         >
-          {/* OpenCV Core Ready Pill */}
-          <div className="flex items-center justify-between text-[11px] text-white/40 px-2">
+          {/* Engine Status Pill */}
+          <div className="flex items-center justify-between text-[11px] text-white/50 px-2">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 size={13} className={cvReady ? 'text-green-400' : 'text-amber-400'} />
-              <span>OpenCV.js & Retinex Worker</span>
+              <span>Engineered by Sanket Wanve</span>
             </span>
-            <span className="font-mono text-green-400 font-semibold">
-              {cvReady ? 'ACTIVE' : 'READY'}
+            <span className="font-mono text-green-400 font-semibold tracking-wider">
+              SWINFOSYSTEMS
             </span>
           </div>
 
