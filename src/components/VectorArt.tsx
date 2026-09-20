@@ -218,3 +218,66 @@ export const BookGuideOverlay: React.FC = () => {
     </div>
   );
 };
+
+/**
+ * ✨ Gemini-Style 4-Pointed Curved Sparkle Star
+ */
+export const GeminiSparkleStar: React.FC<{
+  size?: number;
+  className?: string;
+  gradient?: 'aurora' | 'emerald' | 'amber';
+}> = ({ size = 24, className = '', gradient = 'aurora' }) => {
+  const gradId = `geminiGrad_${gradient}_${size}`;
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      style={{ width: size, height: size }}
+      className={`shrink-0 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)] ${className}`}
+    >
+      <defs>
+        {gradient === 'aurora' && (
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" />
+            <stop offset="50%" stopColor="#4ade80" />
+            <stop offset="100%" stopColor="#a855f7" />
+          </linearGradient>
+        )}
+        {gradient === 'emerald' && (
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#4ade80" />
+            <stop offset="100%" stopColor="#10b981" />
+          </linearGradient>
+        )}
+        {gradient === 'amber' && (
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#f97316" />
+          </linearGradient>
+        )}
+      </defs>
+      {/* 4-point astroid star curve */}
+      <path
+        d="M 50,0 Q 50,50 0,50 Q 50,50 50,100 Q 50,50 100,50 Q 50,50 50,0 Z"
+        fill={`url(#${gradId})`}
+      />
+    </svg>
+  );
+};
+
+/**
+ * ⚡ Holographic AI Corner Brackets
+ */
+export const AiCornerBrackets: React.FC<{ className?: string }> = ({ className = '' }) => {
+  return (
+    <div className={`absolute inset-0 pointer-events-none ${className}`}>
+      {/* Top Left */}
+      <div className="absolute top-2 left-2 w-5 h-5 border-t-2 border-l-2 border-green-400 rounded-tl-sm shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
+      {/* Top Right */}
+      <div className="absolute top-2 right-2 w-5 h-5 border-t-2 border-r-2 border-green-400 rounded-tr-sm shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
+      {/* Bottom Left */}
+      <div className="absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 border-green-400 rounded-bl-sm shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
+      {/* Bottom Right */}
+      <div className="absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-green-400 rounded-br-sm shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
+    </div>
+  );
+};

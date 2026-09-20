@@ -4,17 +4,25 @@ import { CameraView } from './components/CameraView';
 import { CropEditor } from './components/CropEditor';
 import { FilterPreview } from './components/FilterPreview';
 import { DocumentGallery } from './components/DocumentGallery';
+import { GeminiOnboardingSplash } from './components/GeminiOnboardingSplash';
 
 const AppContent = () => {
-  const { currentView } = useAppStore();
+  const { currentView, showOnboarding, setShowOnboarding, cvReady } = useAppStore();
 
   return (
-    <Layout>
-      {currentView === 'camera' && <CameraView />}
-      {currentView === 'crop' && <CropEditor />}
-      {currentView === 'filter' && <FilterPreview />}
-      {currentView === 'gallery' && <DocumentGallery />}
-    </Layout>
+    <>
+      <GeminiOnboardingSplash
+        isOpen={showOnboarding}
+        onClose={() => setShowOnboarding(false)}
+        cvReady={cvReady}
+      />
+      <Layout>
+        {currentView === 'camera' && <CameraView />}
+        {currentView === 'crop' && <CropEditor />}
+        {currentView === 'filter' && <FilterPreview />}
+        {currentView === 'gallery' && <DocumentGallery />}
+      </Layout>
+    </>
   );
 };
 

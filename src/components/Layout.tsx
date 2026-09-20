@@ -67,31 +67,38 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="shrink-0 h-[76px] bg-[#1a1a1a] border-t border-white/10 flex items-center justify-around px-6 z-50"
-            style={{ boxShadow: '0 -8px 32px rgba(0,0,0,0.6)' }}
+            className="shrink-0 h-[76px] bg-[#141416]/90 backdrop-blur-2xl border-t border-white/10 flex items-center justify-around px-5 z-50 shadow-[0_-8px_32px_rgba(0,0,0,0.7)]"
           >
-            {/* Gallery */}
+            {/* Gallery Tab */}
             <button
-              onClick={() => setCurrentView('gallery')}
-              className={`relative flex flex-col items-center justify-center gap-1 w-14 transition-all ${
-                currentView === 'gallery' ? 'text-green-400 font-bold' : 'text-white/40 hover:text-white'
+              onClick={() => {
+                if (navigator.vibrate) navigator.vibrate(10);
+                setCurrentView('gallery');
+              }}
+              className={`relative flex flex-col items-center justify-center gap-1 w-12 transition-all ${
+                currentView === 'gallery'
+                  ? 'text-green-400 font-bold scale-105'
+                  : 'text-white/40 hover:text-white'
               }`}
             >
-              <ImageIcon size={22} />
-              <span className="text-[10px] font-medium">Gallery</span>
+              <ImageIcon size={21} />
+              <span className="text-[10px] font-medium">Scans</span>
               {documents.length > 0 && (
-                <span className="absolute -top-1 right-1 bg-green-400 text-black text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="absolute -top-1 -right-0.5 bg-green-400 text-black text-[9px] font-extrabold rounded-full w-4 h-4 flex items-center justify-center shadow-[0_0_8px_rgba(74,222,128,0.6)]">
                   {documents.length > 9 ? '9+' : documents.length}
                 </span>
               )}
             </button>
 
-            {/* Scan FAB */}
+            {/* Scan Central FAB */}
             <button
-              onClick={() => setCurrentView('camera')}
-              className="relative -top-5 flex items-center justify-center w-[64px] h-[64px] rounded-full bg-gradient-to-br from-green-300 to-green-500 text-black shadow-[0_0_30px_rgba(74,222,128,0.5)] active:scale-95 transition-transform"
+              onClick={() => {
+                if (navigator.vibrate) navigator.vibrate(15);
+                setCurrentView('camera');
+              }}
+              className="relative -top-5 flex items-center justify-center w-[66px] h-[66px] rounded-full bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 text-black shadow-[0_0_30px_rgba(74,222,128,0.55)] active:scale-95 transition-transform"
             >
-              <Camera size={28} strokeWidth={2.5} />
+              <Camera size={29} strokeWidth={2.6} />
               {batchPages.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-black border-2 border-green-400 text-green-400 text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center">
                   {batchPages.length}
@@ -99,9 +106,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               )}
             </button>
 
-            {/* Upload from device */}
-            <label className="flex flex-col items-center justify-center gap-1 w-14 cursor-pointer text-white/40 hover:text-white transition-colors">
-              <Upload size={22} />
+            {/* Upload Multi-Images */}
+            <label
+              onClick={() => navigator.vibrate && navigator.vibrate(10)}
+              className="flex flex-col items-center justify-center gap-1 w-12 cursor-pointer text-white/40 hover:text-white transition-colors"
+            >
+              <Upload size={21} />
               <span className="text-[10px] font-medium">Upload</span>
               <input
                 type="file"

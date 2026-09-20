@@ -20,6 +20,10 @@ interface AppState {
   idCardFront: string | null;
   setIdCardFront: (val: string | null) => void;
 
+  // Gemini Onboarding Splash
+  showOnboarding: boolean;
+  setShowOnboarding: (val: boolean) => void;
+
   // Actions
   setDocuments: React.Dispatch<React.SetStateAction<ScannedDocument[]>>;
   setCurrentView: React.Dispatch<React.SetStateAction<'camera' | 'crop' | 'filter' | 'gallery'>>;
@@ -46,6 +50,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // ID Card dual-side capture state
   const [idCardFront, setIdCardFront] = useState<string | null>(null);
+
+  // Gemini Onboarding
+  const [showOnboarding, setShowOnboarding] = useState<boolean>(() => {
+    return !localStorage.getItem('swscanner_onboarding_seen');
+  });
 
   useEffect(() => {
     StorageService.getAllDocuments().then(setDocuments);
@@ -200,6 +209,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         saveCurrentBatchAsDocument,
         idCardFront,
         setIdCardFront,
+        showOnboarding,
+        setShowOnboarding,
         addDocument,
         updateDocumentTitle,
         deleteDocumentPage,

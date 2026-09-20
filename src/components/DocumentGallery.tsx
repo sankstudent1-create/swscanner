@@ -27,7 +27,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrandLogo, EmptyGalleryVector } from './VectorArt';
+import { BrandLogo, EmptyGalleryVector, GeminiSparkleStar } from './VectorArt';
 
 export const DocumentGallery: React.FC = () => {
   const {
@@ -41,6 +41,7 @@ export const DocumentGallery: React.FC = () => {
     batchPages,
     saveCurrentBatchAsDocument,
     clearBatch,
+    setShowOnboarding,
   } = useAppStore();
 
   const [isExporting, setIsExporting] = useState(false);
@@ -281,26 +282,40 @@ export const DocumentGallery: React.FC = () => {
           <>
             <BrandLogo size={32} showText={true} />
 
-            {documents.length > 0 && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsSelectionMode(true)}
-                  className="flex items-center gap-1 bg-white/10 text-white/80 hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition"
-                >
-                  <CheckSquare size={13} />
-                  <span>Select</span>
-                </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  if (navigator.vibrate) navigator.vibrate(15);
+                  setShowOnboarding(true);
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500/15 via-green-500/15 to-purple-500/15 border border-green-400/30 text-xs font-semibold text-white/90 hover:text-white transition active:scale-95 shadow-[0_0_12px_rgba(74,222,128,0.2)]"
+                title="View Gemini AI Features"
+              >
+                <GeminiSparkleStar size={15} gradient="aurora" />
+                <span className="hidden sm:inline">AI Engine</span>
+              </button>
 
-                <button
-                  onClick={handleExportAll}
-                  disabled={isExporting}
-                  className="flex items-center gap-1.5 bg-green-400 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-[0_0_15px_rgba(74,222,128,0.3)] hover:bg-green-300 transition active:scale-95 disabled:opacity-50"
-                >
-                  <FileDown size={14} />
-                  <span>{isExporting ? 'Exporting...' : 'Export All'}</span>
-                </button>
-              </div>
-            )}
+              {documents.length > 0 && (
+                <>
+                  <button
+                    onClick={() => setIsSelectionMode(true)}
+                    className="flex items-center gap-1 bg-white/10 text-white/80 hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition"
+                  >
+                    <CheckSquare size={13} />
+                    <span>Select</span>
+                  </button>
+
+                  <button
+                    onClick={handleExportAll}
+                    disabled={isExporting}
+                    className="flex items-center gap-1.5 bg-green-400 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-[0_0_15px_rgba(74,222,128,0.3)] hover:bg-green-300 transition active:scale-95 disabled:opacity-50"
+                  >
+                    <FileDown size={14} />
+                    <span>{isExporting ? 'Exporting...' : 'Export All'}</span>
+                  </button>
+                </>
+              )}
+            </div>
           </>
         )}
       </div>

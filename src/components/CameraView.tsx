@@ -19,7 +19,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrandLogo, IdCardGuideOverlay, BookGuideOverlay } from './VectorArt';
+import { BrandLogo, IdCardGuideOverlay, BookGuideOverlay, GeminiSparkleStar } from './VectorArt';
 import { IdCardService } from '../services/IdCardService';
 
 declare const ImageCapture: any;
@@ -63,6 +63,7 @@ export const CameraView: React.FC = () => {
     addPageToBatch,
     idCardFront,
     setIdCardFront,
+    setShowOnboarding,
   } = useAppStore();
 
   const [idCardToast, setIdCardToast] = useState<string | null>(null);
@@ -529,6 +530,19 @@ export const CameraView: React.FC = () => {
             title="Scan Tips"
           >
             <HelpCircle size={16} />
+          </button>
+
+          {/* Gemini AI Tour button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (navigator.vibrate) navigator.vibrate(15);
+              setShowOnboarding(true);
+            }}
+            className="w-9 h-9 rounded-full bg-gradient-to-r from-cyan-500/20 via-green-500/20 to-purple-500/20 border border-green-400/40 text-green-400 flex items-center justify-center transition active:scale-95 shadow-[0_0_12px_rgba(74,222,128,0.3)]"
+            title="Gemini AI Scanner Overview"
+          >
+            <GeminiSparkleStar size={17} gradient="aurora" />
           </button>
         </div>
       </div>
