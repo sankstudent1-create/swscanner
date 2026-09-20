@@ -100,8 +100,8 @@ export const CameraView: React.FC = () => {
       const constraints: MediaStreamConstraints = {
         video: {
           facingMode,
-          width: { ideal: 4096, min: 640 },
-          height: { ideal: 4096, min: 480 },
+          width: { ideal: 1920, min: 1280 },
+          height: { ideal: 1080, min: 720 },
           frameRate: { ideal: 30 },
         } as MediaTrackConstraints,
       };
@@ -142,7 +142,7 @@ export const CameraView: React.FC = () => {
     };
   }, [startCamera]);
 
-  // Analyze video lighting periodically
+  // Analyze video lighting periodically without redundant re-renders
   useEffect(() => {
     if (!cameraReady) return;
     const sampleCanvas = document.createElement('canvas');
@@ -163,16 +163,10 @@ export const CameraView: React.FC = () => {
           sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
         }
         const avg = sum / (40 * 40);
-
-        if (avg < 45) {
-          setLightingState('low');
-        } else if (avg > 220) {
-          setLightingState('glare');
-        } else {
-          setLightingState('optimal');
-        }
+        const nextState = avg < 45 ? 'low' : avg > 220 ? 'glare' : 'optimal';
+        setLightingState((prev) => (prev === nextState ? prev : nextState));
       } catch (_) {}
-    }, 600);
+    }, 1200);
 
     return () => clearInterval(interval);
   }, [cameraReady]);

@@ -65,7 +65,7 @@ export const BrandLogo: React.FC<{ size?: number; showText?: boolean }> = ({
         <div className="flex flex-col leading-none">
           <div className="flex items-center gap-1.5">
             <span className="font-display font-extrabold text-base tracking-tight text-white">
-              CamScanner<span className="text-green-400">AI</span>
+              SWScanner<span className="text-green-400">AI</span>
             </span>
             <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-green-400/15 text-green-400 border border-green-400/30">
               PRO

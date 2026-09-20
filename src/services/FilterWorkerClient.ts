@@ -18,6 +18,7 @@ class FilterWorkerClientManager {
   private pendingResolvers = new Map<
     string,
     {
+      channel: 'main' | 'thumb';
       resolve: (imageData: ImageData) => void;
       reject: (err: Error) => void;
     }
@@ -67,14 +68,17 @@ class FilterWorkerClientManager {
   public process(
     sourceImageData: ImageData,
     filterId: string,
-    adjustments?: ImageAdjustments
+    adjustments?: ImageAdjustments,
+    channel: 'main' | 'thumb' = 'main'
   ): Promise<ImageData> {
     const id = (++this.currentRequestId).toString();
 
-    // Cancel prior pending calls if they exist
-    for (const [pendingId, cb] of this.pendingResolvers.entries()) {
-      cb.reject(new Error('SUPERSEDED'));
-      this.pendingResolvers.delete(pendingId);
+    // Only cancel prior calls on the SAME channel (never let thumb cancel main!)
+    for (const [pendingId, item] of this.pendingResolvers.entries()) {
+      if (item.channel === channel) {
+        item.reject(new Error('SUPERSEDED'));
+        this.pendingResolvers.delete(pendingId);
+      }
     }
 
     if (!this.worker) {
@@ -82,7 +86,7 @@ class FilterWorkerClientManager {
     }
 
     return new Promise<ImageData>((resolve, reject) => {
-      this.pendingResolvers.set(id, { resolve, reject });
+      this.pendingResolvers.set(id, { channel, resolve, reject });
 
       // Clone buffer to send transferable copy so caller's original canvas is safe
       const w = sourceImageData.width;

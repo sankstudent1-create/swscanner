@@ -14,7 +14,12 @@ interface AppState {
   setIsBatchMode: (mode: boolean) => void;
   addPageToBatch: (page: ScannedPage) => void;
   clearBatch: () => void;
-  saveCurrentBatchAsDocument: (title?: string) => Promise<ScannedDocument | null>;
+  saveCurrentBatchAsDocument: (title?: string, extraPage?: ScannedPage) => Promise<ScannedDocument | null>;
+
+  // Append page to existing document
+  activeTargetDocId: string | null;
+  setActiveTargetDocId: (docId: string | null) => void;
+  appendPageToDocument: (docId: string, page: ScannedPage) => Promise<void>;
 
   // ID Card dual-side session
   idCardFront: string | null;
@@ -47,6 +52,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Batch scan mode state
   const [isBatchMode, setIsBatchMode] = useState<boolean>(false);
   const [batchPages, setBatchPages] = useState<ScannedPage[]>([]);
+  const [activeTargetDocId, setActiveTargetDocId] = useState<string | null>(null);
 
   // ID Card dual-side capture state
   const [idCardFront, setIdCardFront] = useState<string | null>(null);
@@ -76,8 +82,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setBatchPages([]);
   };
 
-  const saveCurrentBatchAsDocument = async (customTitle?: string): Promise<ScannedDocument | null> => {
-    if (batchPages.length === 0) return null;
+  const saveCurrentBatchAsDocument = async (customTitle?: string, extraPage?: ScannedPage): Promise<ScannedDocument | null> => {
+    const allPages = extraPage ? [...batchPages, extraPage] : [...batchPages];
+    if (allPages.length === 0) return null;
 
     const docId = Date.now().toString();
     const dateStr = new Date().toLocaleDateString(undefined, {
@@ -89,18 +96,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const newDoc: ScannedDocument = {
       id: docId,
-      title: customTitle || `Scan ${dateStr} (${batchPages.length} ${batchPages.length === 1 ? 'page' : 'pages'})`,
+      title: customTitle || `Scan ${dateStr} (${allPages.length} ${allPages.length === 1 ? 'page' : 'pages'})`,
       timestamp: Date.now(),
-      pages: [...batchPages],
-      processedImage: batchPages[0]?.processedImage,
-      originalImage: batchPages[0]?.originalImage,
-      filter: batchPages[0]?.filter,
+      pages: allPages,
+      processedImage: allPages[0]?.processedImage,
+      originalImage: allPages[0]?.originalImage,
+      filter: allPages[0]?.filter,
     };
 
     await StorageService.saveDocument(newDoc);
     setDocuments((prev) => [newDoc, ...prev].sort((a, b) => b.timestamp - a.timestamp));
     setBatchPages([]);
     return newDoc;
+  };
+
+  const appendPageToDocument = async (docId: string, page: ScannedPage) => {
+    const doc = documents.find((d) => d.id === docId);
+    if (!doc) return;
+    const updatedPages = [...doc.pages, page];
+    const updated: ScannedDocument = {
+      ...doc,
+      pages: updatedPages,
+      processedImage: updatedPages[0]?.processedImage,
+    };
+    await StorageService.saveDocument(updated);
+    setDocuments((prev) => prev.map((d) => (d.id === docId ? updated : d)));
+    setActiveTargetDocId(null);
   };
 
   const addDocument = async (doc: ScannedDocument) => {
@@ -207,6 +228,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addPageToBatch,
         clearBatch,
         saveCurrentBatchAsDocument,
+        activeTargetDocId,
+        setActiveTargetDocId,
+        appendPageToDocument,
         idCardFront,
         setIdCardFront,
         showOnboarding,

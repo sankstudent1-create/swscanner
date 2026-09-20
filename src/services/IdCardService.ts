@@ -54,7 +54,7 @@ export const IdCardService = {
     // Subtitle
     ctx.fillStyle = '#6b7280';
     ctx.font = '500 18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-    ctx.fillText('OFFICIAL IDENTIFICATION COPY · SCANNED WITH CAMSCANNER AI', a4W / 2, 125);
+    ctx.fillText('OFFICIAL IDENTIFICATION COPY · SCANNED WITH SWSCANNER AI', a4W / 2, 125);
 
     // Divider
     ctx.strokeStyle = '#e5e7eb';

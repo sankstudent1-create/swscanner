@@ -42,6 +42,7 @@ export const DocumentGallery: React.FC = () => {
     saveCurrentBatchAsDocument,
     clearBatch,
     setShowOnboarding,
+    setActiveTargetDocId,
   } = useAppStore();
 
   const [isExporting, setIsExporting] = useState(false);
@@ -775,6 +776,7 @@ export const DocumentGallery: React.FC = () => {
               {/* Add Page to Document Button */}
               <button
                 onClick={() => {
+                  setActiveTargetDocId(selectedDoc.id);
                   setSelectedDoc(null);
                   setCurrentView('camera');
                 }}

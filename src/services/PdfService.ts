@@ -117,7 +117,7 @@ export const PdfService = {
         await navigator.share({
           files: [file],
           title: safeFilename.replace('.pdf', ''),
-          text: 'Scanned with CamScanner PWA',
+          text: 'Scanned with SWScanner',
         });
         return true;
       } catch (e: any) {

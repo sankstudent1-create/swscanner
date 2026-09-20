@@ -54,6 +54,8 @@ export const FilterPreview: React.FC = () => {
     batchPages,
     addPageToBatch,
     saveCurrentBatchAsDocument,
+    activeTargetDocId,
+    appendPageToDocument,
     isBatchMode,
   } = useAppStore();
 
@@ -89,20 +91,25 @@ export const FilterPreview: React.FC = () => {
       setIsProcessing(true);
 
       try {
-        // Grab base ImageData from source if not already cached
+        // Grab base ImageData scaled to max 1440px for 60fps blazing fast performance
         if (!rawImageDataRef.current) {
           const off = document.createElement('canvas');
-          off.width = img.naturalWidth;
-          off.height = img.naturalHeight;
+          const MAX_DIM = 1440;
+          const scale = Math.min(1, MAX_DIM / Math.max(img.naturalWidth, img.naturalHeight));
+          const w = Math.round(img.naturalWidth * scale);
+          const h = Math.round(img.naturalHeight * scale);
+          off.width = w;
+          off.height = h;
           const ctx = off.getContext('2d')!;
-          ctx.drawImage(img, 0, 0);
-          rawImageDataRef.current = ctx.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
+          ctx.drawImage(img, 0, 0, w, h);
+          rawImageDataRef.current = ctx.getImageData(0, 0, w, h);
         }
 
         const processed = await FilterWorkerClient.process(
           rawImageDataRef.current,
           filterId,
-          adj
+          adj,
+          'main'
         );
 
         canvas.width = processed.width;
@@ -124,11 +131,11 @@ export const FilterPreview: React.FC = () => {
   );
 
   /**
-   * Generate thumbnails for all filters using downsampled proxy.
+   * Generate thumbnails for all filters using downsampled proxy on 'thumb' channel.
    */
   const generateThumbs = useCallback(
     async (img: HTMLImageElement) => {
-      const THUMB_MAX = 100;
+      const THUMB_MAX = 90;
       const scale = Math.min(1, THUMB_MAX / Math.max(img.naturalWidth, img.naturalHeight));
       const tw = Math.round(img.naturalWidth * scale);
       const th = Math.round(img.naturalHeight * scale);
@@ -147,7 +154,8 @@ export const FilterPreview: React.FC = () => {
           const processed = await FilterWorkerClient.process(
             thumbImageData,
             f.id,
-            DEFAULT_ADJUSTMENTS
+            DEFAULT_ADJUSTMENTS,
+            'thumb'
           );
           const workCanvas = document.createElement('canvas');
           workCanvas.width = tw;
@@ -155,7 +163,7 @@ export const FilterPreview: React.FC = () => {
           workCanvas.getContext('2d')!.putImageData(processed, 0, 0);
           thumbs[f.id] = workCanvas.toDataURL('image/jpeg', 0.8);
         } catch (_) {
-          // Skip if superseded
+          // Skip if cancelled
         }
       }
 
@@ -164,7 +172,7 @@ export const FilterPreview: React.FC = () => {
     []
   );
 
-  // Initialize image on load
+  // Initialize image on load: immediately render main magic_color filter
   useEffect(() => {
     if (!currentImage) return;
     setThumbnails({});
@@ -180,8 +188,13 @@ export const FilterPreview: React.FC = () => {
           canvas.height = img.naturalHeight;
           canvas.getContext('2d')!.drawImage(img, 0, 0);
         }
-        generateThumbs(img);
+        // 1. Immediately apply the default Magic Color AI filter on main channel
         applyFilterViaWorker('magic_color', DEFAULT_ADJUSTMENTS);
+
+        // 2. Generate thumbnails in background after main image renders
+        setTimeout(() => {
+          generateThumbs(img);
+        }, 60);
       })
       .catch((e) => {
         console.error('Failed to load image in FilterPreview', e);
@@ -230,12 +243,35 @@ export const FilterPreview: React.FC = () => {
     return canvas.toDataURL('image/jpeg', 0.95);
   };
 
-  const handleSaveSingle = async () => {
+  const handleSave = async () => {
     const processedImageData = getProcessedDataUrl();
     if (!processedImageData || !currentImage) return;
 
     setIsSaving(true);
     try {
+      const newPage = {
+        id: Date.now().toString(),
+        processedImage: processedImageData,
+        originalImage: currentImage,
+        filter: activeFilter,
+        timestamp: Date.now(),
+      };
+
+      // Case 1: Appending to an existing document from gallery
+      if (activeTargetDocId) {
+        await appendPageToDocument(activeTargetDocId, newPage);
+        setCurrentView('gallery');
+        return;
+      }
+
+      // Case 2: Multi-page batch session (saves all previous pages + current page)
+      if (batchPages.length > 0) {
+        await saveCurrentBatchAsDocument(undefined, newPage);
+        setCurrentView('gallery');
+        return;
+      }
+
+      // Case 3: Single document
       await addDocument({
         id: Date.now().toString(),
         title: `Scan ${new Date().toLocaleDateString(undefined, {
@@ -245,15 +281,7 @@ export const FilterPreview: React.FC = () => {
           minute: '2-digit',
         })}`,
         timestamp: Date.now(),
-        pages: [
-          {
-            id: Date.now().toString(),
-            processedImage: processedImageData,
-            originalImage: currentImage,
-            filter: activeFilter,
-            timestamp: Date.now(),
-          },
-        ],
+        pages: [newPage],
       });
       setCurrentView('gallery');
     } finally {
@@ -275,27 +303,6 @@ export const FilterPreview: React.FC = () => {
 
     // Go back to camera for next page
     setCurrentView('camera');
-  };
-
-  const handleFinishBatchDocument = async () => {
-    const processedImageData = getProcessedDataUrl();
-    if (!processedImageData || !currentImage) return;
-
-    setIsSaving(true);
-    try {
-      addPageToBatch({
-        id: Date.now().toString(),
-        processedImage: processedImageData,
-        originalImage: currentImage,
-        filter: activeFilter,
-        timestamp: Date.now(),
-      });
-
-      await saveCurrentBatchAsDocument();
-      setCurrentView('gallery');
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   if (!currentImage) {
@@ -607,13 +614,7 @@ export const FilterPreview: React.FC = () => {
           {/* Save / Complete Document button */}
           <motion.button
             whileTap={{ scale: 0.94 }}
-            onClick={() => {
-              if (batchPages.length > 0) {
-                handleFinishBatchDocument();
-              } else {
-                handleSaveSingle();
-              }
-            }}
+            onClick={handleSave}
             disabled={isSaving || isProcessing}
             className="flex-1 flex items-center justify-center gap-1.5 bg-green-400 hover:bg-green-300 text-black font-bold py-3 px-3 rounded-xl shadow-[0_0_20px_rgba(74,222,128,0.4)] text-xs transition disabled:opacity-40"
           >
@@ -623,6 +624,8 @@ export const FilterPreview: React.FC = () => {
                 transition={{ repeat: Infinity, duration: 0.7, ease: 'linear' }}
                 className="w-4 h-4 border-2 border-black border-t-transparent rounded-full"
               />
+            ) : activeTargetDocId ? (
+              <Plus size={16} strokeWidth={3} />
             ) : batchPages.length > 0 ? (
               <CheckCheck size={16} />
             ) : (
@@ -631,8 +634,10 @@ export const FilterPreview: React.FC = () => {
             <span>
               {isSaving
                 ? 'Saving...'
+                : activeTargetDocId
+                ? 'Save Page to Doc'
                 : batchPages.length > 0
-                ? `Finish (${totalPagesInSession}p)`
+                ? `Save Doc (${batchPages.length + 1}p)`
                 : 'Save Document'}
             </span>
           </motion.button>
