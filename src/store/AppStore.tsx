@@ -45,7 +45,8 @@ const AppContext = createContext<AppState | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [documents, setDocuments] = useState<ScannedDocument[]>([]);
-  const [currentView, setCurrentView] = useState<'camera' | 'crop' | 'filter' | 'gallery'>('camera');
+  // Default to gallery so camera permission is not forcefully requested on cold launch
+  const [currentView, setCurrentView] = useState<'camera' | 'crop' | 'filter' | 'gallery'>('gallery');
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [cvReady, setCvReady] = useState(false);
 

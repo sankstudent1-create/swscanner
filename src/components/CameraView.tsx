@@ -17,6 +17,7 @@ import {
   CreditCard,
   BookOpen,
   FileText,
+  Camera,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrandLogo, IdCardGuideOverlay, BookGuideOverlay, GeminiSparkleStar } from './VectorArt';
@@ -137,7 +138,19 @@ export const CameraView: React.FC = () => {
 
   useEffect(() => {
     startCamera();
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        const track = streamRef.current?.getVideoTracks()[0];
+        if (!track || track.readyState === 'ended' || !track.enabled) {
+          startCamera();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
       streamRef.current?.getTracks().forEach((t) => t.stop());
     };
   }, [startCamera]);
@@ -546,15 +559,41 @@ export const CameraView: React.FC = () => {
         </div>
       </div>
 
-      {/* Error alert */}
+      {/* Camera Permission / Error Recovery Screen */}
       {error && (
-        <div
-          className="absolute left-4 right-4 z-30 bg-red-900/80 text-red-200 text-xs px-4 py-2 rounded-xl text-center backdrop-blur-md"
-          style={{
-            top: 'calc(max(14px, calc(env(safe-area-inset-top, 0px) + 8px)) + 46px)',
-          }}
-        >
-          ⚠ {error}
+        <div className="absolute inset-0 z-40 bg-[#0d0d10]/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center text-white">
+          <div className="w-16 h-16 rounded-3xl bg-green-400/10 border border-green-400/30 flex items-center justify-center mb-4 text-green-400 shadow-[0_0_30px_rgba(74,222,128,0.2)]">
+            <Camera size={32} />
+          </div>
+          <h3 className="font-display font-bold text-lg text-white">Camera Access Required</h3>
+          <p className="text-xs text-white/60 max-w-xs mt-1.5 leading-relaxed">
+            SWScanner needs camera permission to capture documents.
+          </p>
+
+          <button
+            onClick={() => {
+              setError(null);
+              startCamera();
+            }}
+            className="mt-5 px-6 py-3 rounded-2xl bg-gradient-to-r from-green-400 to-emerald-400 text-black font-extrabold text-xs tracking-wide shadow-[0_0_25px_rgba(74,222,128,0.4)] active:scale-95 transition"
+          >
+            Grant Camera Access
+          </button>
+
+          {/* iOS Permanent Fix Card */}
+          <div className="mt-6 p-4 rounded-2xl bg-white/5 border border-white/10 max-w-xs text-left">
+            <p className="text-[11px] font-bold text-green-400 flex items-center gap-1.5">
+              <span>📲</span> iOS: Stop Asking Permission
+            </p>
+            <ol className="text-[10px] text-white/70 mt-1.5 space-y-1 list-decimal list-inside leading-relaxed">
+              <li>In Safari, tap <strong className="text-white">aA</strong> in the search bar</li>
+              <li>Tap <strong className="text-white">Website Settings</strong></li>
+              <li>Under Camera, change to <strong className="text-green-400">Allow</strong></li>
+            </ol>
+            <p className="text-[9px] text-white/40 mt-2">
+              Safari will remember your permission permanently on every visit.
+            </p>
+          </div>
         </div>
       )}
 
@@ -804,12 +843,12 @@ export const CameraView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/5">
-                  <span className="text-lg">✨</span>
+                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-green-500/10 border border-green-500/20">
+                  <span className="text-lg">📲</span>
                   <div>
-                    <p className="font-bold text-white text-[13px]">Use Magic Color</p>
-                    <p className="text-white/60 text-[11px] mt-0.5">
-                      Our dual-engine MSRCR filter automatically removes table background, bleaches paper white, and sharpens ink strokes.
+                    <p className="font-bold text-green-400 text-[13px]">iOS: Never Get Prompted Again</p>
+                    <p className="text-white/70 text-[11px] mt-0.5 leading-relaxed">
+                      In Safari, tap <strong className="text-white">aA</strong> in the search bar → <strong className="text-white">Website Settings</strong> → set <strong className="text-green-400">Camera: Allow</strong>. Safari will remember it permanently!
                     </p>
                   </div>
                 </div>
