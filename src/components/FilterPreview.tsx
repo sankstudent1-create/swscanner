@@ -316,7 +316,12 @@ export const FilterPreview: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col bg-black text-white select-none">
       {/* Top Header */}
-      <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-black/90 border-b border-white/10 z-20">
+      <div
+        className="shrink-0 flex items-center justify-between px-4 pb-3 bg-black/90 border-b border-white/10 z-20"
+        style={{
+          paddingTop: 'max(14px, calc(env(safe-area-inset-top, 0px) + 8px))',
+        }}
+      >
         <button
           onClick={() => setCurrentView('crop')}
           className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center active:bg-white/20 transition"
@@ -589,7 +594,13 @@ export const FilterPreview: React.FC = () => {
       </div>
 
       {/* Bottom Save / Multi-page Action Row */}
-      <div className="shrink-0 min-h-[76px] bg-[#1a1a1a] flex items-center justify-between px-4 py-2 border-t border-white/10 gap-2">
+      <div
+        className="shrink-0 bg-[#1a1a1a] flex items-center justify-between px-4 pt-2 border-t border-white/10 gap-2"
+        style={{
+          minHeight: 'calc(74px + env(safe-area-inset-bottom, 0px))',
+          paddingBottom: 'max(10px, env(safe-area-inset-bottom, 0px))',
+        }}
+      >
         <button
           onClick={() => setCurrentView('crop')}
           className="flex flex-col items-center justify-center w-12 text-white/50 active:text-white"

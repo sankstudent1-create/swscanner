@@ -248,7 +248,12 @@ export const DocumentGallery: React.FC = () => {
   return (
     <div className="w-full h-full bg-[#121212] flex flex-col text-white select-none">
       {/* Top Header */}
-      <div className="px-5 py-3.5 border-b border-white/10 flex justify-between items-center bg-[#181818]/90 backdrop-blur-md">
+      <div
+        className="px-5 pb-3.5 border-b border-white/10 flex justify-between items-center bg-[#181818]/90 backdrop-blur-md shrink-0"
+        style={{
+          paddingTop: 'max(14px, calc(env(safe-area-inset-top, 0px) + 8px))',
+        }}
+      >
         {isSelectionMode ? (
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-3">
@@ -348,7 +353,12 @@ export const DocumentGallery: React.FC = () => {
       )}
 
       {/* Gallery Grid */}
-      <div className="flex-1 overflow-y-auto p-4 pb-32">
+      <div
+        className="flex-1 overflow-y-auto p-4"
+        style={{
+          paddingBottom: 'calc(96px + env(safe-area-inset-bottom, 0px))',
+        }}
+      >
         {documents.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center p-6">
             <EmptyGalleryVector />
@@ -443,7 +453,10 @@ export const DocumentGallery: React.FC = () => {
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
-            className="fixed bottom-20 left-4 right-4 z-40 bg-[#1f1f1f]/95 backdrop-blur-xl border border-white/15 p-3 rounded-2xl shadow-2xl flex items-center justify-between max-w-lg mx-auto"
+            className="fixed left-4 right-4 z-40 bg-[#1f1f1f]/95 backdrop-blur-xl border border-white/15 p-3 rounded-2xl shadow-2xl flex items-center justify-between max-w-lg mx-auto"
+            style={{
+              bottom: 'calc(80px + env(safe-area-inset-bottom, 0px))',
+            }}
           >
             <div className="text-xs font-bold text-green-400 pl-2">
               {selectedDocIds.size} Selected
@@ -495,7 +508,12 @@ export const DocumentGallery: React.FC = () => {
             className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex flex-col text-white"
           >
             {/* Modal Header */}
-            <div className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/80">
+            <div
+              className="shrink-0 flex items-center justify-between px-4 pb-3 border-b border-white/10 bg-black/80"
+              style={{
+                paddingTop: 'max(14px, calc(env(safe-area-inset-top, 0px) + 8px))',
+              }}
+            >
               <button
                 onClick={() => {
                   setSelectedDoc(null);
@@ -680,6 +698,9 @@ export const DocumentGallery: React.FC = () => {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: 260, opacity: 0 }}
                   className="bg-[#181818] border-t border-white/15 p-4 flex flex-col gap-2 max-h-[360px] shadow-2xl z-30"
+                  style={{
+                    paddingBottom: 'max(16px, env(safe-area-inset-bottom, 0px))',
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -748,7 +769,13 @@ export const DocumentGallery: React.FC = () => {
             </AnimatePresence>
 
             {/* Bottom Page Thumbnail Strip */}
-            <div className="shrink-0 h-20 bg-[#161616] border-t border-white/10 flex items-center px-4 gap-3 overflow-x-auto">
+            <div
+              className="shrink-0 bg-[#161616] border-t border-white/10 flex items-center px-4 gap-3 overflow-x-auto"
+              style={{
+                height: 'calc(76px + env(safe-area-inset-bottom, 0px))',
+                paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+              }}
+            >
               {selectedDoc.pages.map((p, idx) => (
                 <button
                   key={p.id}

@@ -79,7 +79,12 @@ export const GeminiOnboardingSplash: React.FC<GeminiOnboardingSplashProps> = ({
         <div className="absolute top-[40%] right-[-20%] w-[60vw] h-[60vw] rounded-full bg-purple-500/10 blur-[130px] pointer-events-none" />
 
         {/* Top Header */}
-        <div className="relative z-10 px-6 pt-6 flex items-center justify-between">
+        <div
+          className="relative z-10 px-6 pb-2 flex items-center justify-between"
+          style={{
+            paddingTop: 'max(20px, calc(env(safe-area-inset-top, 0px) + 12px))',
+          }}
+        >
           <div className="flex items-center gap-2">
             <GeminiSparkleStar size={26} gradient="aurora" />
             <div className="flex flex-col">
@@ -174,7 +179,12 @@ export const GeminiOnboardingSplash: React.FC<GeminiOnboardingSplashProps> = ({
         </div>
 
         {/* Bottom Engine Status & Action Button */}
-        <div className="relative z-10 px-6 pb-8 pt-2 flex flex-col gap-3 max-w-md mx-auto w-full">
+        <div
+          className="relative z-10 px-6 pt-2 flex flex-col gap-3 max-w-md mx-auto w-full"
+          style={{
+            paddingBottom: 'max(24px, calc(env(safe-area-inset-bottom, 0px) + 12px))',
+          }}
+        >
           {/* OpenCV Core Ready Pill */}
           <div className="flex items-center justify-between text-[11px] text-white/40 px-2">
             <span className="flex items-center gap-1.5">

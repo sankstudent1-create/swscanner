@@ -67,7 +67,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="shrink-0 h-[76px] bg-[#141416]/90 backdrop-blur-2xl border-t border-white/10 flex items-center justify-around px-5 z-50 shadow-[0_-8px_32px_rgba(0,0,0,0.7)]"
+            className="shrink-0 bg-[#141416]/95 backdrop-blur-2xl border-t border-white/10 flex items-center justify-around px-5 z-50 shadow-[0_-8px_32px_rgba(0,0,0,0.7)]"
+            style={{
+              height: 'calc(68px + env(safe-area-inset-bottom, 0px))',
+              paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+            }}
           >
             {/* Gallery Tab */}
             <button

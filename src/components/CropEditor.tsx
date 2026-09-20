@@ -284,7 +284,12 @@ export const CropEditor: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col bg-black select-none">
       {/* Header */}
-      <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-black/90 border-b border-white/10 z-20">
+      <div
+        className="shrink-0 flex items-center justify-between px-4 pb-3 bg-black/90 border-b border-white/10 z-20"
+        style={{
+          paddingTop: 'max(14px, calc(env(safe-area-inset-top, 0px) + 8px))',
+        }}
+      >
         <button
           onClick={() => setCurrentView('camera')}
           className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center active:bg-white/20 transition"
@@ -524,7 +529,13 @@ export const CropEditor: React.FC = () => {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="shrink-0 h-16 bg-[#161616] flex items-center justify-between px-5 border-t border-white/10 z-20">
+      <div
+        className="shrink-0 bg-[#161616] flex items-center justify-between px-5 border-t border-white/10 z-20"
+        style={{
+          height: 'calc(68px + env(safe-area-inset-bottom, 0px))',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        }}
+      >
         {/* Re-detect Edges */}
         <button
           onClick={handleReDetect}

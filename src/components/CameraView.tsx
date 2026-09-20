@@ -453,7 +453,12 @@ export const CameraView: React.FC = () => {
       </AnimatePresence>
 
       {/* Top Bar: Brand logo, Lighting status & Controls */}
-      <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-4 pt-4 pb-3">
+      <div
+        className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-4 pb-3"
+        style={{
+          paddingTop: 'max(14px, calc(env(safe-area-inset-top, 0px) + 8px))',
+        }}
+      >
         {/* Left: Brand Logo & Lighting */}
         <div className="flex items-center gap-2">
           <BrandLogo size={30} showText={false} />
@@ -543,7 +548,12 @@ export const CameraView: React.FC = () => {
 
       {/* Error alert */}
       {error && (
-        <div className="absolute top-16 left-4 right-4 z-30 bg-red-900/80 text-red-200 text-xs px-4 py-2 rounded-xl text-center backdrop-blur-md">
+        <div
+          className="absolute left-4 right-4 z-30 bg-red-900/80 text-red-200 text-xs px-4 py-2 rounded-xl text-center backdrop-blur-md"
+          style={{
+            top: 'calc(max(14px, calc(env(safe-area-inset-top, 0px) + 8px)) + 46px)',
+          }}
+        >
           ⚠ {error}
         </div>
       )}
